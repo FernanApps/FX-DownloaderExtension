@@ -1,4 +1,5 @@
 import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
@@ -92,7 +93,7 @@ def applyKotlinModule(project) {
     }
     project.dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-        api 'com.github.FernanApps:FX-DownloaderSocial:0.0.2'
+        api 'com.github.FernanApps:FX-DownloaderSocial:0.0.421@jar'
     }
 
 
@@ -252,4 +253,21 @@ static def throwExceptionIfUndefined(project, property, defaultValueProperty = "
         throw new GradleException(exceptionMessage)
     }
 }
+
+task mergeJsonFiles {
+    def folderPath = "${rootProject.projectDir}/"
+
+    def jsonObjects = []
+
+    fileTree(dir: folderPath, include: '*/build/manifest.json').each { file ->
+        def jsonContent = file.text
+        def jsonObject = new JsonSlurper().parseText(jsonContent)
+        jsonObjects.add(jsonObject)
+    }
+
+    def outputFilePath = "${rootProject.projectDir}/extensions.json"
+    def outputFile = file(outputFilePath)
+    outputFile.text = new JsonBuilder(jsonObjects).toPrettyString()
+}
+
 

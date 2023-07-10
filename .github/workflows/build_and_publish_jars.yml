@@ -38,8 +38,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build Android modules
+    - name: Build Modules
       run: ./gradlew assemble
+
+    - name: Build Modules
+      run: ./gradlew mergeJsonFiles
 
     - name: Move JAR files to release folder
       run: |
@@ -60,3 +63,4 @@ jobs:
         title: "Release - ${{ github.sha }}"
         files: |
           release_jars/*.jar
+          extensions.json
