@@ -14,8 +14,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v2
+    - name: Checkout private tools
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.ATOKEN }}
 
     - name: Set up JDK 17
       uses: actions/setup-java@v3
