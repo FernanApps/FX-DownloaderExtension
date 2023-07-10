@@ -1,0 +1,255 @@
+import groovy.json.JsonBuilder
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        lifecycle = '2.6.1'
+        retrofit = "2.9.0"
+        okHttp = "4.11.0"
+        rxBindings = "4.0.0"
+        glide = "4.15.1"
+        constraint_layout = '2.1.4'
+        coroutines = '1.7.2'
+        nav_version = '2.6.0'
+        rx = '3.0.1'
+        material = "1.9.0"
+        moshi = "1.15.0"
+        fragment = "1.6.0"
+        activity = "1.7.2"
+        appCompat = "1.6.1"
+        coreKTX = "1.10.1"
+        securityVersion = "1.1.0-alpha06"
+        recyclerview = '1.3.0'
+        annotationVersion = '1.6.0'
+        documentFile = '1.0.1'
+        swipeRefresh = '1.1.0'
+        viewPager = '1.0.0'
+        biometrics = '1.2.0-alpha05'
+        joda = '2.12.5'
+        exifinterface = '1.3.6'
+        palette = '1.0.0'
+        preference = '1.2.0'
+        collection = '1.2.0'
+        interpolator = '1.0.0'
+        transition = '1.4.1'
+
+
+        //app only
+        room_version = "2.5.2"
+
+
+        //tests
+        junitVersion = '4.13.2'
+        hamcrestVersion = '1.3'
+        androidXTestCoreVersion = '1.5.0'
+        androidXTestExtKotlinRunnerVersion = '1.1.5'
+        androidXTestRulesVersion = '1.2.0-beta01'
+        robolectricVersion = '4.10.3'
+        archTestingVersion = '2.2.0'
+        espressoVersion = '3.5.1'
+
+        //compilation
+        compileVersion = 33
+        minVersion = 23
+        verCode = 1
+        verName = "1.0.0"
+        testRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        kotlin_version = '1.8.22'
+
+
+    }
+}
+
+
+plugins {
+    id 'com.android.application' version '8.0.0' apply false
+    id 'com.android.library' version '8.0.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.8.0' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.8.0' apply false
+}
+
+subprojects {
+
+    apply plugin: 'java-library'
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    applyKotlinModule(it)
+
+//    if (!project.properties('nameModule')) {
+//        throw new GradleException("La variable 'nameModule' no está definida en el archivo build.gradle del módulo")
+//    }
+
+
+}
+
+
+
+def applyKotlinModule(project) {
+
+    project.java {
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
+    }
+    project.dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        api 'com.github.FernanApps:FX-DownloaderSocial:0.0.2'
+    }
+
+
+// TODO Please Not Change Property
+
+    def internalNameProperty  = 'internalName'
+
+    def nameProperty = '_name'
+    def mainClassProperty = '_mainClass'
+    def authorProperty = '_authors'
+    def versionProperty = '_version'
+    def descriptionProperty = '_description'
+    def iconUrlProperty = '_iconUrl'
+
+// TODO Please Not Change Property
+
+
+    def manifestName = "${project.buildDir}/manifest.json"
+
+    project.afterEvaluate {
+
+
+        throwExceptionIfUndefined(project, nameProperty, "Tiktok");
+        throwExceptionIfUndefined(project, mainClassProperty, "pe.fernan.downloader.TiktokProvider");
+
+        // If One Author -> "Fernan Apps"
+        // If Multiples Author -> "Fernan Apps, Cracken Apps
+        throwExceptionIfUndefined(project, authorProperty, "Fernan Apps");
+        throwExceptionIfUndefined(project, versionProperty, "1.0.0");
+        throwExceptionIfUndefined(project, descriptionProperty, "This Tiktok Downloader");
+        throwExceptionIfUndefined(project, iconUrlProperty, "https://example.com/tiktok.png");
+
+        project.tasks.jar {
+//            doFirst {
+//                if (!checkMainClassExtendsAbstract(project, project.property(mainClassProperty))) {
+//                    throw new GradleException("La clase principal no se extiende de BaseDownloaderSocial.")
+//                }
+//            }
+
+//            manifest {
+//                attributes(
+//                        (internalNameProperty): project.name,
+//                        (nameProperty): project.property(nameProperty),
+//                        (mainClassProperty): project.property(mainClassProperty),
+//                        (authorProperty): project.property(authorProperty),
+//                        (versionProperty): project.property(versionProperty),
+//                        (descriptionProperty): project.property(descriptionProperty),
+//                        (iconUrlProperty): project.property(iconUrlProperty)
+//                )
+//            }
+            from(manifestName) {
+                into('META-INF')
+            }
+            from project.sourceSets.main.output
+        }
+
+
+
+
+        project.task('checkMainClassExists') {
+//            doLast {
+//                def mainClass = project.property(mainClassProperty)
+//                try {
+//                    Class.forName(mainClass)
+//                } catch (ClassNotFoundException e) {
+//                    throw new GradleException("La clase principal '$mainClass' no se encontro.")
+//                }
+//            }
+        }
+
+
+
+        project.task('generateJsonContent') {
+            doLast {
+                def jsonContent = new groovy.json.JsonBuilder()
+                jsonContent {
+                    "$internalNameProperty" "${project.name}"
+                    "$nameProperty" "${project.property(nameProperty)}"
+                    "$mainClassProperty" "${project.property(mainClassProperty)}"
+                    "$authorProperty" "${project.property(authorProperty)}"
+                    "$versionProperty" "${project.property(versionProperty)}"
+                    "$descriptionProperty" "${project.property(descriptionProperty)}"
+                    "$iconUrlProperty" "${project.property(iconUrlProperty)}"
+                }
+
+                // Guardar el contenido JSON en un archivo
+                def jsonFile = file(manifestName)
+                jsonFile.text = jsonContent.toString()
+
+                println "Contenido JSON generado:\n${jsonContent.toPrettyString()}"
+            }
+        }
+        project.tasks.jar {
+            dependsOn('generateJsonContent')
+        }
+
+    }
+
+
+}
+
+
+//static def checkMainClassExtendsAbstract(project, mainClass) {
+//
+//    def moduleName = project.name
+//    def classExists = false
+//
+//    try {
+//        def moduleClassLoader = getClass().classLoader.getModuleClassLoader()
+//        def clazz = moduleClassLoader.loadClass(mainClass)
+//        classExists = true
+//    } catch (ClassNotFoundException e) {
+//        // La clase no se encontró en el módulo especificado
+//    }
+//
+//    if (classExists) {
+//        println "La clase principal '$mainClass' existe en el módulo '$moduleName'."
+//    } else {
+//        println "La clase principal '$mainClass' no se encontró en el módulo '$moduleName'."
+//    }
+//
+//
+//
+//
+//    def mainBaseClass = "pe.fernan.downloader.social.core.BaseDownloaderSocial"
+//
+//    try {
+//        def clazz = Class.forName(mainClass)
+//        def superClass = clazz.superclass
+//
+//        while (superClass != null) {
+//            if (superClass.canonicalName == mainBaseClass) {
+//                return true
+//            }
+//            superClass = superClass.superclass
+//        }
+//    } catch (ClassNotFoundException e) {
+//        throw new GradleException("La clase principal '$mainClass' no se encontró.")
+//    }
+//
+//    return false
+//}
+
+
+static def throwExceptionIfUndefined(project, property, defaultValueProperty = "") {
+    if (!project.hasProperty(property)) {
+        def buildGradlePath = project.file('build.gradle').path
+
+        def defaultValue = defaultValueProperty.isEmpty() ? "value of $property" : defaultValueProperty
+
+        def exceptionMessage = "La variable $property no está definida " +
+                "en el archivo build.gradle de ${project.name} " +
+                "para definir ve a -> $buildGradlePath " +
+                "y agregar la siguiente linea al final:\n\n" +
+                "\text.$property = \"$defaultValue\"\t\n\n"
+
+        throw new GradleException(exceptionMessage)
+    }
+}
+
