@@ -45,7 +45,7 @@ jobs:
       run: |
         mkdir jars
         find . -name '*.jar' -exec cp {} jars/ \;
-        cd jars && rm -f gradle-wrapper.jar $$ cd ..
+        cd jars && rm -f gradle-wrapper.jar && cd ..
         ls -R jars/
         mkdir -p ${{ github.workspace }}/release_jars
         cp -r jars/. ${{ github.workspace }}/release_jars/
