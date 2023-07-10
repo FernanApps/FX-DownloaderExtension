@@ -1,0 +1,9 @@
+ext {
+    _name = "Tiktok"
+    _authors = "Fernan Apps"
+    _version = "0.0.2"
+    _description = "This a Tiktok Downloader"
+    _mainClass = "pe.fernan.downloader.tiktok.TiktokProvider"
+    _iconUrl = "https://example.com/tiktok.png"
+
+}
