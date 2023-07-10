@@ -93,7 +93,7 @@ def applyKotlinModule(project) {
     }
     project.dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-        api 'com.github.FernanApps:FX-DownloaderSocial:0.0.421@jar'
+        api 'com.github.FernanApps:FX-DownloaderSocial:0.0.421'
     }
 
 
