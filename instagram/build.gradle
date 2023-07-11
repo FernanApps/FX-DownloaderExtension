@@ -1,0 +1,9 @@
+ext {
+    _name = "Instagram"
+    _authors = "Fernan Apps"
+    _version = "0.0.1"
+    _description = "This a Instagram Downloader"
+    _mainClass = "pe.fernan.downloader.InstagramProvider"
+    _iconUrl = "https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+
+}

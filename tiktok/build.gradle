@@ -3,7 +3,7 @@ ext {
     _authors = "Fernan Apps"
     _version = "0.0.3"
     _description = "This a Tiktok Downloader"
-    _mainClass = "pe.fernan.downloader.tiktok.TiktokProvider"
+    _mainClass = "pe.fernan.downloader.TiktokProvider"
     _iconUrl = "https://cdn-icons-png.flaticon.com/512/4782/4782345.png"
 
 }

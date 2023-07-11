@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "FX-DownloaderExtension"
 include ':tiktok'
+include ':instagram'

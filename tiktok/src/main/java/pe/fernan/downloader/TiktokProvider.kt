@@ -1,4 +1,4 @@
-package pe.fernan.downloader.tiktok
+package pe.fernan.downloader
 import org.jsoup.Jsoup
 import pe.fernan.downloader.social.core.BaseDownloaderSocial
 import pe.fernan.downloader.social.core.model.Author
@@ -14,9 +14,7 @@ import java.util.concurrent.TimeUnit
 var currentTT: String? = null
 
 class TiktokProvider : BaseDownloaderSocial()  {
-    override val baseUrl: String
-        get() = TODO("Not yet implemented")
-
+    override val baseUrl: String get() = "https://www.tiktok.com"
     override val regex: String get() = ".tiktok."
 
 
